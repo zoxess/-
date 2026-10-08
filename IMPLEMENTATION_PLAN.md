@@ -9,7 +9,7 @@ Product: a wallet-optional ticketing flow for independent event organizers. Sola
 3. **Local product flow — complete.** Create an event, issue a QR ticket, transfer/revoke it, and scan it once. Clearly label local in-memory state as a demo.
 4. **Solana program and wallet wiring — source implemented; build/deploy pending.** Anchor instructions cover event creation, issuance, gate authority, transfer, revoke, and check-in. The QR secret is committed on-chain as a SHA-256 digest, and the API verifies confirmed Devnet transactions, expected signers, PDA derivation, and resulting account state when the program is configured.
 5. **Verification — local checks complete; on-chain checks pending.** The API tests cover QR issuance, transfer invalidation, single-use check-in, capacity, and revocation. Vite production build succeeds. Anchor compilation and program tests still need the official Rust, Solana, and Anchor toolchain.
-6. **Devnet demo and handoff — pending.** Build and test the Anchor program; generate and pin its program ID; deploy to Devnet; configure `GATEPROOF_PROGRAM_ID`; verify wallet-backed transactions; capture the demo flow and document the repository setup.
+6. **Devnet demo and handoff — pending.** Vercel now builds into `dist` and routes `/api/*` to a Node function. Build and test the Anchor program; generate and pin its program ID; deploy to Devnet; configure `GATEPROOF_PROGRAM_ID`; replace in-memory API state with a database for a reliable hosted demo; capture the demo flow and document the repository setup.
 
 ## Current blockers and boundaries
 

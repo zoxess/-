@@ -8,7 +8,7 @@ import { clusterApiUrl, Connection, PublicKey } from '@solana/web3.js';
 import QRCode from 'qrcode';
 
 const root = fileURLToPath(new URL('.', import.meta.url));
-const publicDir = join(root, 'public');
+const publicDir = join(root, 'dist');
 const events = new Map();
 const tickets = new Map();
 const port = Number(process.env.PORT ?? 4173);
@@ -149,6 +149,14 @@ function sendJson(res, status, value) {
 }
 
 async function readJson(req) {
+  if (req.body && typeof req.body === 'object') return req.body;
+  if (typeof req.body === 'string' && req.body) {
+    try {
+      return JSON.parse(req.body);
+    } catch {
+      throw new Error('Request body must be valid JSON.');
+    }
+  }
   let raw = '';
   for await (const chunk of req) {
     raw += chunk;
@@ -455,6 +463,16 @@ async function serveStatic(req, res, url) {
   }
 }
 
+export async function handleVercelApi(req, res) {
+  const url = new URL(req.url ?? '/', `http://${req.headers.host ?? 'localhost'}`);
+  try {
+    if (url.pathname.startsWith('/api/')) await handleApi(req, res, url);
+    else sendJson(res, 404, { error: 'API route not found.' });
+  } catch (error) {
+    sendJson(res, 400, { error: error instanceof Error ? error.message : 'Не удалось обработать запрос.' });
+  }
+}
+
 const server = createServer(async (req, res) => {
   const url = new URL(req.url ?? '/', `http://${req.headers.host ?? 'localhost'}`);
   try {
@@ -465,7 +483,9 @@ const server = createServer(async (req, res) => {
   }
 });
 
-server.listen(port, '127.0.0.1', () => {
-  const address = server.address();
-  console.log(`GateProof local demo: http://localhost:${typeof address === 'object' && address ? address.port : port}`);
-});
+if (process.env.VERCEL !== '1') {
+  server.listen(port, '127.0.0.1', () => {
+    const address = server.address();
+    console.log(`GateProof local demo: http://localhost:${typeof address === 'object' && address ? address.port : port}`);
+  });
+}

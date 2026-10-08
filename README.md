@@ -20,6 +20,12 @@ pnpm dev
 
 Open `http://localhost:4173`.
 
+## Vercel
+
+`vercel.json` sets the Vite build output to `dist`, and `/api/*` requests are routed to the Node.js function in `api/[...path].mjs`.
+
+The API currently keeps events and tickets in process memory. Vercel Functions can restart or serve requests in separate instances, so this deployment is suitable for a visual demo but does not provide durable or shared ticket data. Add a persistent database before relying on it across users or devices.
+
 ## Product flow
 
 1. Create a demo event.

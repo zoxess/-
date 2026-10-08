@@ -1,18 +1,11 @@
 import { defineConfig } from 'vite';
 
 export default defineConfig({
+  root: 'public',
   publicDir: false,
   build: {
-    outDir: 'public/build',
+    outDir: '../dist',
     emptyOutDir: true,
     target: 'es2022',
-    rollupOptions: {
-      input: 'public/app.js',
-      output: {
-        entryFileNames: 'app.js',
-        chunkFileNames: 'chunks/[name]-[hash].js',
-        assetFileNames: 'assets/[name]-[hash][extname]',
-      },
-    },
   },
 });
