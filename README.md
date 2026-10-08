@@ -79,7 +79,7 @@ The same UI and API support local demo mode before a program is deployed. In loc
 
 ## Quick Start
 
-Requires Node.js 20 or later and pnpm.
+Requires Node.js 20.19+ or 22.12+ and pnpm.
 
 ```sh
 git clone https://github.com/zoxess/-.git gateproof
